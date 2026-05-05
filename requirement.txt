@@ -1,13 +1,7 @@
-# Core Web Framework
-streamlit>=1.20.0
-
-# Deep Learning Framework
+--find-links https://download.pytorch.org/whl/cpu/torch_stable.html
 torch
-torchvision>=0.15.0
-
-# Image Processing & Math
-Pillow>=9.0.0
-numpy>=1.21.0
-
-# Optional: Visualization (if you plan to show metrics/charts)
-matplotlib>=3.5.0
+torchvision
+streamlit
+pillow
+numpy
+matplotlib
