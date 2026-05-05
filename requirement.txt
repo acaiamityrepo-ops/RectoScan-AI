@@ -2,7 +2,7 @@
 streamlit>=1.20.0
 
 # Deep Learning Framework
-torch>=2.0.0
+torch
 torchvision>=0.15.0
 
 # Image Processing & Math
