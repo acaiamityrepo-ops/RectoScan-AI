@@ -1,0 +1,6 @@
+# Ignore the environment folder
+env/
+
+# You should also usually ignore individual .env files
+.env
+.env.local
