@@ -8,7 +8,7 @@ import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
 
 # --- CONFIGURATION ---
-st.set_page_config(page_title="NeuroScan AI", layout="wide")
+st.set_page_config(page_title="RectoScan AI", layout="wide")
 NUM_CLASSES = 2 
 
 # --- STEP 1: MODEL ARCHITECTURE ---
@@ -151,7 +151,7 @@ def create_viz(orig, pred, a1, a2):
 
 # --- STEP 3: STREAMLIT UI ---
 
-st.title("🧠 NeuroScan AI: TransUNet Diagnostic")
+st.title("🧠 RectoScan AI: TransUNet Diagnostic")
 st.write("Upload a brain MRI/CT slice for automated tumor segmentation.")
 
 file = st.file_uploader("Upload Medical Image", type=["jpg", "png", "jpeg"])
