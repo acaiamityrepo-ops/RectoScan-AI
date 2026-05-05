@@ -1,0 +1,13 @@
+# Core Web Framework
+streamlit>=1.20.0
+
+# Deep Learning Framework
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Image Processing & Math
+Pillow>=9.0.0
+numpy>=1.21.0
+
+# Optional: Visualization (if you plan to show metrics/charts)
+matplotlib>=3.5.0
