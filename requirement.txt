@@ -1,7 +1,0 @@
---find-links https://download.pytorch.org/whl/cpu/torch_stable.html
-torch
-torchvision
-streamlit
-pillow
-numpy
-matplotlib
