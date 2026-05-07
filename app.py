@@ -235,7 +235,7 @@ if selected_tab == "🏠 Home":
     axes[3].axis('off')
 
     plt.tight_layout()
-    return fig
+    #return fig
 
 # --- STEP 3: STREAMLIT UI ---
 
