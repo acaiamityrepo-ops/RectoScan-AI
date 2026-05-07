@@ -122,11 +122,6 @@ def display_permanent_logo():
         )
     except: pass
 
-display_permanent_logo()
-
-col1, col2, col3 = st.columns([3, 4, 1])
-with col2:
-    st.image("amity_logo.png")
 
 
 
