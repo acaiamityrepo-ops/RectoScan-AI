@@ -12,12 +12,6 @@ import json
 # ============================================
 # MODEL ARCHITECTURE (Integrated)
 # ============================================
-# --- CONFIGURATION ---
-st.set_page_config(page_title="RectoScan AI", layout="wide")
-NUM_CLASSES = 2 
-
-# --- STEP 1: MODEL ARCHITECTURE ---
-
 def conv_block(in_channels, out_channels):
     return nn.Sequential(
         nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1, bias=False),
@@ -215,43 +209,6 @@ if selected_tab == "🏠 Home":
             Designed for clinical decision support, it provides heatmaps (Attention Maps) to explain <i>why</i> the AI made its diagnosis, 
             ensuring transparency in medical AI.
         </div><br>""", unsafe_allow_html=True)
-    # 2. Predicted Mask (Overlay Style)
-    mask_rgb = np.zeros((*pred.shape, 3))
-    mask_rgb[pred == 1] = [1, 0, 0] # Red for Tumor
-    axes[1].imshow(mask_rgb)
-    axes[1].set_title("Predicted Label (Tumor)")
-    axes[1].axis('off')
-
-    # 3. Attention Map 1
-    im1 = axes[2].imshow(a1, cmap='viridis')
-    axes[2].set_title("Attention Map 1 (Fine)")
-    plt.colorbar(im1, ax=axes[2], fraction=0.046, pad=0.04)
-    axes[2].axis('off')
-
-    # 4. Attention Map 2
-    im2 = axes[3].imshow(a2, cmap='viridis')
-    axes[3].set_title("Attention Map 2 (Coarse)")
-    plt.colorbar(im2, ax=axes[3], fraction=0.046, pad=0.04)
-    axes[3].axis('off')
-
-    plt.tight_layout()
-    return fig
-
-# --- STEP 3: STREAMLIT UI ---
-
-st.title("🧠 RectoScan AI: TransUNet Diagnostic")
-st.write("Upload a brain MRI/CT slice for automated tumor segmentation.")
-
-file = st.file_uploader("Upload Medical Image", type=["jpg", "png", "jpeg"])
-
-if file:
-    img = Image.open(file).convert("RGB")
-    model = load_model()
-    input_batch = preprocess(img)
-
-    with torch.no_grad():
-        logits, alpha1, alpha2 = model(input_batch)
-        probs = F.softmax(logits, dim=1)
         
         c1, c2, c3 = st.columns([1, 1, 1])
         with c2:
@@ -372,4 +329,3 @@ elif selected_tab == "ℹ️ About":
         The system utilizes a hybrid CNN-Transformer backbone. Attention gates are implemented in the skip-connections to filter out non-relevant features and focus on pathological areas. 
         The model was trained on a comprehensive binary classification dataset to achieve high Dice scores and explainable attention coefficients.
     </div>""", unsafe_allow_html=True)
-    st.pyplot(create_viz(orig_np, pred_np, a1_np, a2_np))
