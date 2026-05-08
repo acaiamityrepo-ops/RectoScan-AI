@@ -230,8 +230,7 @@ elif selected_tab == "🔎 Prediction":
     with col_l:
         st.subheader("1. Clinical Data")
         patient_id = st.text_input("Patient ID (Optional)")
-        modality = st.selectbox("Imaging Modality", ["MRI (T2-Weighted)", "CT Scan", "X-Ray"])
-        slice_num = st.number_input("Slice Number", 1, 500, 1)
+        
 
     with col_r:
         st.subheader("2. Upload Scan")
@@ -270,7 +269,42 @@ elif selected_tab == "🔎 Prediction":
                             "color": color
                         }
                         st.session_state.processed = True
-                        st.session_state.active_tab = "📊 Analysis"
+                        #st.session_state.active_tab = "📊 Analysis"
+                        vd = st.session_state.viz_data
+                        st.markdown(f"## Diagnostic Report")
+                        
+                        c1, c2 = st.columns(2)
+                        with c1:
+                            st.markdown(f"""
+                            <div class="card">
+                                <div class="badge">AI Diagnosis</div>
+                                <h2 style="color:{vd['color']}">{vd['diag']}</h2>
+                                <p>Status: Pathological focus localized</p>
+                            </div>""", unsafe_allow_html=True)
+                            
+                        with c2:
+                            st.markdown(f"""
+                            <div class="card">
+                                <div class="badge">Confidence Metric</div>
+                                <h2>{vd['conf']*100:.2f}%</h2>
+                                <p>Model certainty on region of interest</p>
+                            </div>""", unsafe_allow_html=True)
+
+                        st.subheader("🛠️ Visualization Dashboard")
+                        fig, axes = plt.subplots(1, 4, figsize=(18, 5))
+                        axes[0].imshow(vd['orig'], cmap='gray'); axes[0].set_title("Input Scan"); axes[0].axis('off')
+                        
+                        mask_rgb = np.zeros((*vd['pred'].shape, 3))
+                        mask_rgb[vd['pred'] == 1] = [1, 0, 0]
+                        axes[1].imshow(mask_rgb); axes[1].set_title("Predicted Tumor Mask"); axes[1].axis('off')
+                        
+                        im1 = axes[2].imshow(vd['a1'], cmap='viridis'); axes[2].set_title("Fine Attention"); axes[2].axis('off')
+                        im2 = axes[3].imshow(vd['a2'], cmap='viridis'); axes[3].set_title("Coarse Attention"); axes[3].axis('off')
+                        st.pyplot(fig)
+
+                        if st.button("New Scan Analysis"):
+                            st.session_state.processed = False
+                            st.session_state.active_tab = "🏠 Home"
                         st.rerun()
             else:
                 st.error("Please upload an image first.")
