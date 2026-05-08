@@ -225,15 +225,10 @@ if selected_tab == "🏠 Home":
 # TAB 2: PREDICTION
 # ============================================
 elif selected_tab == "🔎 Prediction":
-    col_l, col_r = st.columns([1, 1], gap="large")
+    col_r = st.columns([1], gap="large")
     
-    with col_l:
-        st.subheader("1. Clinical Data")
-        patient_id = st.text_input("Patient ID (Optional)")
-        
-
     with col_r:
-        st.subheader("2. Upload Scan")
+        st.subheader("Upload Scan")
         file = st.file_uploader("Upload DICOM/Image", type=["jpg", "png", "jpeg"])
         
         if st.button("Run AI Analysis", use_container_width=True):
