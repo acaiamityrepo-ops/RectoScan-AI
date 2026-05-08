@@ -191,7 +191,7 @@ def preprocess(image):
 # ============================================
 # NAVIGATION
 # ============================================
-tabs = ["🏠 Home", "🔎 Prediction", "📊 Analysis", "ℹ️ About"]
+tabs = ["🏠 Home", "🔎 Prediction", "ℹ️ About"]
 current_index = tabs.index(st.session_state.active_tab)
 selected_tab = st.radio("Nav", tabs, index=current_index, horizontal=True, label_visibility="collapsed")
 st.session_state.active_tab = selected_tab
@@ -313,51 +313,7 @@ elif selected_tab == "🔎 Prediction":
         
 
 # ============================================
-# TAB 3: ANALYSIS
-# ============================================
-elif selected_tab == "📊 Analysis":
-    if not st.session_state.processed:
-        st.warning("⚠️ No diagnostic data found. Please run a prediction first.")
-    else:
-        vd = st.session_state.viz_data
-        st.markdown(f"## Diagnostic Report")
-        
-        c1, c2 = st.columns(2)
-        with c1:
-            st.markdown(f"""
-            <div class="card">
-                <div class="badge">AI Diagnosis</div>
-                <h2 style="color:{vd['color']}">{vd['diag']}</h2>
-                <p>Status: Pathological focus localized</p>
-            </div>""", unsafe_allow_html=True)
-            
-        with c2:
-            st.markdown(f"""
-            <div class="card">
-                <div class="badge">Confidence Metric</div>
-                <h2>{vd['conf']*100:.2f}%</h2>
-                <p>Model certainty on region of interest</p>
-            </div>""", unsafe_allow_html=True)
-
-        st.subheader("🛠️ Visualization Dashboard")
-        fig, axes = plt.subplots(1, 4, figsize=(18, 5))
-        axes[0].imshow(vd['orig'], cmap='gray'); axes[0].set_title("Input Scan"); axes[0].axis('off')
-        
-        mask_rgb = np.zeros((*vd['pred'].shape, 3))
-        mask_rgb[vd['pred'] == 1] = [1, 0, 0]
-        axes[1].imshow(mask_rgb); axes[1].set_title("Predicted Tumor Mask"); axes[1].axis('off')
-        
-        im1 = axes[2].imshow(vd['a1'], cmap='viridis'); axes[2].set_title("Fine Attention"); axes[2].axis('off')
-        im2 = axes[3].imshow(vd['a2'], cmap='viridis'); axes[3].set_title("Coarse Attention"); axes[3].axis('off')
-        st.pyplot(fig)
-
-        if st.button("New Scan Analysis"):
-            st.session_state.processed = False
-            st.session_state.active_tab = "🏠 Home"
-            st.rerun()
-
-# ============================================
-# TAB 4: ABOUT
+# TAB 3: ABOUT
 # ============================================
 elif selected_tab == "ℹ️ About":
     st.markdown("""
