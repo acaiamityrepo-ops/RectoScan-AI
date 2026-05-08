@@ -217,7 +217,7 @@ if selected_tab == "🏠 Home":
         
         c1, c2, c3 = st.columns([1, 1, 1])
         with c2:
-            if st.button("Launch Diagnostic Tool"):
+            if st.button("Launch"):
                 st.session_state.active_tab = "🔎 Prediction"
                 st.rerun()
 
