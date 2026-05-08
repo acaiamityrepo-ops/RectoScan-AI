@@ -305,7 +305,6 @@ elif selected_tab == "🔎 Prediction":
                         if st.button("New Scan Analysis"):
                             st.session_state.processed = False
                             st.session_state.active_tab = "🏠 Home"
-                        st.rerun()
             else:
                 st.error("Please upload an image first.")
 
