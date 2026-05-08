@@ -225,83 +225,92 @@ if selected_tab == "🏠 Home":
 # TAB 2: PREDICTION
 # ============================================
 elif selected_tab == "🔎 Prediction":
-    col_r = st.columns([1], gap="large")
+    st.subheader("Upload Scan")
+    file = st.file_uploader("Upload DICOM/Image", type=["jpg", "png", "jpeg"])
     
-    with col_r:
-        st.subheader("Upload Scan")
-        file = st.file_uploader("Upload DICOM/Image", type=["jpg", "png", "jpeg"])
+    if st.button("Run AI Analysis", use_container_width=True):
+        if file:
+            with st.spinner("Executing TransUNet Pipeline..."):
+                img = Image.open(file).convert("RGB")
+                model = load_model()
+                input_batch = preprocess(img)
+
+                with torch.no_grad():
+                    logits, a1, a2 = model(input_batch)
+                    probs = F.softmax(logits, dim=1)
+                    conf_vals, pred_vals = torch.max(probs, dim=1)
+                    pred_np = pred_vals.squeeze().cpu().numpy()
+                    
+                    if torch.any(pred_vals == 1):
+                        confidence = conf_vals[pred_vals == 1].mean().item()
+                        diagnosis = "TUMOR DETECTED"
+                        color = "red"
+                    else:
+                        confidence = conf_vals.mean().item()
+                        diagnosis = "NORMAL"
+                        color = "green"
+
+                    # Store data for visualization
+                    st.session_state.viz_data = {
+                        "orig": np.array(img.convert("L").resize((224, 224))),
+                        "pred": pred_np,
+                        "a1": a1.squeeze().cpu().numpy(),
+                        "a2": a2.squeeze().cpu().numpy(),
+                        "diag": diagnosis,
+                        "conf": confidence,
+                        "color": color
+                    }
+                    st.session_state.processed = True
+                    # st.session_state.active_tab = "📊 Analysis"
+                    
+                    vd = st.session_state.viz_data
+                    st.markdown(f"## Diagnostic Report")
+                    
+                    c1, c2 = st.columns(2)
+                    with c1:
+                        st.markdown(f"""
+                        <div class="card">
+                            <div class="badge">AI Diagnosis</div>
+                            <h2 style="color:{vd['color']}">{vd['diag']}</h2>
+                            <p>Status: Pathological focus localized</p>
+                        </div>""", unsafe_allow_html=True)
+                        
+                    with c2:
+                        st.markdown(f"""
+                        <div class="card">
+                            <div class="badge">Confidence Metric</div>
+                            <h2>{vd['conf']*100:.2f}%</h2>
+                            <p>Model certainty on region of interest</p>
+                        </div>""", unsafe_allow_html=True)
+
+                    st.subheader("🛠️ Visualization Dashboard")
+                    fig, axes = plt.subplots(1, 4, figsize=(18, 5))
+                    axes[0].imshow(vd['orig'], cmap='gray')
+                    axes[0].set_title("Input Scan")
+                    axes[0].axis('off')
+                    
+                    mask_rgb = np.zeros((*vd['pred'].shape, 3))
+                    mask_rgb[vd['pred'] == 1] = [1, 0, 0]
+                    axes[1].imshow(mask_rgb)
+                    axes[1].set_title("Predicted Tumor Mask")
+                    axes[1].axis('off')
+                    
+                    axes[2].imshow(vd['a1'], cmap='viridis')
+                    axes[2].set_title("Fine Attention")
+                    axes[2].axis('off')
+                    
+                    axes[3].imshow(vd['a2'], cmap='viridis')
+                    axes[3].set_title("Coarse Attention")
+                    axes[3].axis('off')
+                    
+                    st.pyplot(fig)
+
+                    if st.button("New Scan Analysis"):
+                        st.session_state.processed = False
+                        st.session_state.active_tab = "🏠 Home"
+        else:
+            st.error("Please upload an image first.")
         
-        if st.button("Run AI Analysis", use_container_width=True):
-            if file:
-                with st.spinner("Executing TransUNet Pipeline..."):
-                    img = Image.open(file).convert("RGB")
-                    model = load_model()
-                    input_batch = preprocess(img)
-
-                    with torch.no_grad():
-                        logits, a1, a2 = model(input_batch)
-                        probs = F.softmax(logits, dim=1)
-                        conf_vals, pred_vals = torch.max(probs, dim=1)
-                        pred_np = pred_vals.squeeze().cpu().numpy()
-                        
-                        if torch.any(pred_vals == 1):
-                            confidence = conf_vals[pred_vals == 1].mean().item()
-                            diagnosis = "TUMOR DETECTED"
-                            color = "red"
-                        else:
-                            confidence = conf_vals.mean().item()
-                            diagnosis = "NORMAL"
-                            color = "green"
-
-                        # Store data for visualization
-                        st.session_state.viz_data = {
-                            "orig": np.array(img.convert("L").resize((224, 224))),
-                            "pred": pred_np,
-                            "a1": a1.squeeze().cpu().numpy(),
-                            "a2": a2.squeeze().cpu().numpy(),
-                            "diag": diagnosis,
-                            "conf": confidence,
-                            "color": color
-                        }
-                        st.session_state.processed = True
-                        #st.session_state.active_tab = "📊 Analysis"
-                        vd = st.session_state.viz_data
-                        st.markdown(f"## Diagnostic Report")
-                        
-                        c1, c2 = st.columns(2)
-                        with c1:
-                            st.markdown(f"""
-                            <div class="card">
-                                <div class="badge">AI Diagnosis</div>
-                                <h2 style="color:{vd['color']}">{vd['diag']}</h2>
-                                <p>Status: Pathological focus localized</p>
-                            </div>""", unsafe_allow_html=True)
-                            
-                        with c2:
-                            st.markdown(f"""
-                            <div class="card">
-                                <div class="badge">Confidence Metric</div>
-                                <h2>{vd['conf']*100:.2f}%</h2>
-                                <p>Model certainty on region of interest</p>
-                            </div>""", unsafe_allow_html=True)
-
-                        st.subheader("🛠️ Visualization Dashboard")
-                        fig, axes = plt.subplots(1, 4, figsize=(18, 5))
-                        axes[0].imshow(vd['orig'], cmap='gray'); axes[0].set_title("Input Scan"); axes[0].axis('off')
-                        
-                        mask_rgb = np.zeros((*vd['pred'].shape, 3))
-                        mask_rgb[vd['pred'] == 1] = [1, 0, 0]
-                        axes[1].imshow(mask_rgb); axes[1].set_title("Predicted Tumor Mask"); axes[1].axis('off')
-                        
-                        im1 = axes[2].imshow(vd['a1'], cmap='viridis'); axes[2].set_title("Fine Attention"); axes[2].axis('off')
-                        im2 = axes[3].imshow(vd['a2'], cmap='viridis'); axes[3].set_title("Coarse Attention"); axes[3].axis('off')
-                        st.pyplot(fig)
-
-                        if st.button("New Scan Analysis"):
-                            st.session_state.processed = False
-                            st.session_state.active_tab = "🏠 Home"
-            else:
-                st.error("Please upload an image first.")
 
 # ============================================
 # TAB 3: ANALYSIS
