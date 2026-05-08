@@ -215,7 +215,7 @@ if selected_tab == "🏠 Home":
             ensuring transparency in medical AI.
         </div><br>""", unsafe_allow_html=True)
         
-        c1, c2, c3 = st.columns([1, 4, 1])
+        c1, c2, c3 = st.columns([3, 4, 1])
         with c2:
             if st.button("Launch"):
                 st.session_state.active_tab = "🔎 Prediction"
