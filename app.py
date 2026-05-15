@@ -356,11 +356,16 @@ elif selected_tab == "ℹ️ About":
     st.markdown("""
     <div style="text-align: justify;">
         <h2>Research Abstract</h2>
-        <h4>Background</h4>
-        Precision in medical imaging is critical for early oncology intervention. Traditional UNet models often struggle with long-range dependencies in complex brain structures. 
-        <h4>Objectives</h4>
-        RectoScan AI aims to provide a robust segmentation tool using <b>TransUNet</b>, which leverages Transformers to maintain global context during the encoding phase.
-        <h4>Methods</h4>
-        The system utilizes a hybrid CNN-Transformer backbone. Attention gates are implemented in the skip-connections to filter out non-relevant features and focus on pathological areas. 
-        The model was trained on a comprehensive binary classification dataset to achieve high Dice scores and explainable attention coefficients.
+        <h3>Background</h3>
+        In the realm of oncology, the margin for error is razor-thin. Early intervention depends entirely on the clinician's ability to precisely delineate tumor boundaries.
+While the standard UNet architecture is the "gold standard" for medical segmentation, it relies on successive convolutional layers. These layers are excellent at capturing local features (edges, textures, and shapes) but possess a "limited receptive field."
+<br></br>
+<b>The Problem:</b> Brain tumors can be diffuse or located near complex structures with similar intensities.
+
+<b>The Result:</b> Traditional CNNs often fail to grasp the global context—the relationship between distant pixels—leading to fragmented or inaccurate segmentations in complex cases. 
+        <h3>Objectives</h3>
+        RectoScan AI seeks to solve the "receptive field" problem by integrating Transformers into the segmentation pipeline.
+The primary goal is to maintain high-resolution spatial details while simultaneously capturing long-range dependencies. By treating the image as a sequence of patches (similar to Large Language Models treating words as tokens), the model can "see" the entire brain at once, understanding how a pathology in one region relates to the surrounding healthy tissue.
+        <h3>Methods</h3>
+        The technical superiority of RectoScan AI is rooted in a three-pillar methodology that begins with a hybrid CNN-Transformer backbone, where a CNN encoder first captures high-resolution, low-level grid information before passing flattened feature sequences into a Transformer bottleneck to model the long-range global dependencies that traditional convolutions often overlook. This architecture is further enhanced by the integration of Attention Gates (AGs) within the skip-connections, which intelligently filter information by suppressing irrelevant background noise and highlighting salient pathological features—such as tumor boundaries—as data flows toward the decoder. To ensure clinical efficacy, the model is trained on a comprehensive binary classification dataset and optimized via the Dice Similarity Coefficient (DSC) to address the inherent class imbalance of small lesions within large medical volumes; finally, this process is made transparent through Explainable AI (X-AI) techniques that visualize attention coefficients as heatmaps, transforming the model from an opaque "black box" into a collaborative diagnostic tool that provides radiologists with clear, evidence-based insights.
     </div>""", unsafe_allow_html=True)
