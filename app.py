@@ -208,11 +208,8 @@ if selected_tab == "🏠 Home":
         except: st.info("Place your 'architecture.png' here.")
         st.markdown("""
         <div style="text-align: justify;">
-            RectoScan AI is a state-of-the-art diagnostic assistant leveraging the <b>TransUNet</b> architecture for automated medical image segmentation. 
-            By combining the spatial precision of CNNs with the global context of Transformers and a Dual-Attention mechanism, the system identifies and 
-            localizes brain tumors from MRI/CT scans with superhuman accuracy. 
-            Designed for clinical decision support, it provides heatmaps (Attention Maps) to explain <i>why</i> the AI made its diagnosis, 
-            ensuring transparency in medical AI.
+            RectoScan AI is an AI-assisted framework for the automated detection, localization, and segmentation of rectal tumors from medical images in the CARE dataset. The system is built around a hybrid TransUNet architecture, combining the fine-grained spatial feature extraction capability of Convolutional Neural Networks (CNNs) with the long-range contextual modeling ability of Vision Transformers.
+To further improve localization of small, irregular, and poorly defined tumor regions, the framework can incorporate a Dual-Attention mechanism that emphasizes diagnostically relevant spatial and channel-level information while suppressing irrelevant anatomical background. The final system generates a pixel-level tumor mask together with tumor-localization information and interpretable attention heatmaps, enabling clinicians to examine the image regions that contributed most strongly to the model's prediction.
         </div><br>""", unsafe_allow_html=True)
         
         c1, c2, c3 = st.columns([4, 3.5, 1])
@@ -356,16 +353,25 @@ elif selected_tab == "ℹ️ About":
     st.markdown("""
     <div style="text-align: justify;">
         <h2>Research Abstract</h2>
-        <h3>Background</h3>
-        In the realm of oncology, the margin for error is razor-thin. Early intervention depends entirely on the clinician's ability to precisely delineate tumor boundaries.
-While the standard UNet architecture is the "gold standard" for medical segmentation, it relies on successive convolutional layers. These layers are excellent at capturing local features (edges, textures, and shapes) but possess a "limited receptive field."
-<br></br>
-<b>The Problem:</b> Brain tumors can be diffuse or located near complex structures with similar intensities.
 
-<b>The Result:</b> Traditional CNNs often fail to grasp the global context—the relationship between distant pixels—leading to fragmented or inaccurate segmentations in complex cases. 
+        <h3>Background</h3>
+        Rectal cancer is one of the major malignancies affecting the gastrointestinal tract, and accurate assessment of the tumor region is important for diagnosis, treatment planning, therapy-response evaluation, and surgical decision-making. Medical imaging provides clinicians with essential information regarding the location, morphology, and spatial extent of rectal tumors. However, manual tumor delineation is a time-consuming process and may exhibit considerable inter-observer variability, particularly when tumor boundaries are irregular, low-contrast, or located close to surrounding anatomical structures.
+        <br></br>
+        Conventional CNN-based segmentation architectures such as U-Net have demonstrated strong performance in medical image segmentation because of their ability to learn local spatial patterns, including edges, textures, and anatomical structures. However, convolutional operations primarily model information within local receptive fields. Consequently, conventional CNNs may have difficulty capturing relationships between spatially distant regions of an image.
+        <br></br>
+        <b>The Problem:</b> Rectal tumors can demonstrate heterogeneous appearance, irregular morphology, weak boundaries, and considerable variation in size and location. Tumor tissue may also exhibit imaging characteristics similar to those of surrounding normal structures.
+        <br></br>
+        <b>The Challenge:</b> A segmentation system must preserve fine anatomical details while simultaneously understanding the broader anatomical context of the rectal region.
+        <br></br>
+        <b>Our Approach:</b> RectoScan AI addresses these limitations using a hybrid CNN–Transformer architecture based on TransUNet, enabling simultaneous modeling of local anatomical characteristics and global contextual dependencies.
+
         <h3>Objectives</h3>
-        RectoScan AI seeks to solve the "receptive field" problem by integrating Transformers into the segmentation pipeline.
-The primary goal is to maintain high-resolution spatial details while simultaneously capturing long-range dependencies. By treating the image as a sequence of patches (similar to Large Language Models treating words as tokens), the model can "see" the entire brain at once, understanding how a pathology in one region relates to the surrounding healthy tissue.
+        The primary objective of RectoScan AI is to develop an automated and interpretable framework for rectal cancer detection and segmentation using the CARE dataset.
+        <br></br>
+        The framework is designed to automatically identify the presence and approximate location of rectal tumor regions from input medical images, generate accurate pixel-level segmentation masks that delineate tumor boundaries from surrounding normal anatomical structures, combine local and global feature learning through a hybrid CNN–Transformer architecture, enhance tumor-specific feature representation using attention mechanisms that suppress irrelevant background information and emphasize diagnostically meaningful regions, provide interpretable predictions through attention maps or heatmaps that visually indicate image regions contributing to the model's decisions, and evaluate the proposed framework on the CARE dataset using established segmentation and detection performance measures.
+
         <h3>Methods</h3>
-        The technical superiority of RectoScan AI is rooted in a three-pillar methodology that begins with a hybrid CNN-Transformer backbone, where a CNN encoder first captures high-resolution, low-level grid information before passing flattened feature sequences into a Transformer bottleneck to model the long-range global dependencies that traditional convolutions often overlook. This architecture is further enhanced by the integration of Attention Gates (AGs) within the skip-connections, which intelligently filter information by suppressing irrelevant background noise and highlighting salient pathological features—such as tumor boundaries—as data flows toward the decoder. To ensure clinical efficacy, the model is trained on a comprehensive binary classification dataset and optimized via the Dice Similarity Coefficient (DSC) to address the inherent class imbalance of small lesions within large medical volumes; finally, this process is made transparent through Explainable AI (X-AI) techniques that visualize attention coefficients as heatmaps, transforming the model from an opaque "black box" into a collaborative diagnostic tool that provides radiologists with clear, evidence-based insights.
+        RectoScan AI employs a hybrid TransUNet-based architecture for rectal cancer segmentation on the CARE dataset. A CNN encoder first extracts multi-scale local features such as tumor edges, texture, and anatomical structures. The deepest feature representation is then processed by a Transformer bottleneck to capture long-range spatial dependencies and global anatomical context.
+        <br></br>
+        To improve tumor localization, Dual Attention and Attention Gates emphasize relevant spatial and channel-wise features while suppressing irrelevant background information. The CNN decoder combines these refined features through skip connections and progressively reconstructs the tumor region to the original image resolution. The model is trained using a combination of Dice Loss and Binary Cross-Entropy Loss to address class imbalance and generate accurate pixel-level tumor masks. Attention-based heatmaps are additionally produced for Explainable AI visualization, highlighting the regions that contribute to the model's predictions and providing greater transparency for clinical interpretation.
     </div>""", unsafe_allow_html=True)
