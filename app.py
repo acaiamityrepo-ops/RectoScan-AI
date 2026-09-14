@@ -201,7 +201,7 @@ st.markdown("---")
 # TAB 1: HOME
 # ============================================
 if selected_tab == "🏠 Home":
-    st.markdown('<div class="main-header">🧠 RectoScan AI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">💙 RectoScan AI</div>', unsafe_allow_html=True)
     col1, col2, col3 = st.columns([0.5, 4, 0.5])
     with col2:
         try: st.image("architecture.png", caption="TransUNet with Dual Attention Mechanism")
@@ -353,7 +353,6 @@ elif selected_tab == "ℹ️ About":
     st.markdown("""
     <div style="text-align: justify;">
         <h2>Research Abstract</h2>
-
         <h3>Background</h3>
         Rectal cancer is one of the major malignancies affecting the gastrointestinal tract, and accurate assessment of the tumor region is important for diagnosis, treatment planning, therapy-response evaluation, and surgical decision-making. Medical imaging provides clinicians with essential information regarding the location, morphology, and spatial extent of rectal tumors. However, manual tumor delineation is a time-consuming process and may exhibit considerable inter-observer variability, particularly when tumor boundaries are irregular, low-contrast, or located close to surrounding anatomical structures.
         <br></br>
@@ -364,12 +363,10 @@ elif selected_tab == "ℹ️ About":
         <b>The Challenge:</b> A segmentation system must preserve fine anatomical details while simultaneously understanding the broader anatomical context of the rectal region.
         <br></br>
         <b>Our Approach:</b> RectoScan AI addresses these limitations using a hybrid CNN–Transformer architecture based on TransUNet, enabling simultaneous modeling of local anatomical characteristics and global contextual dependencies.
-
         <h3>Objectives</h3>
         The primary objective of RectoScan AI is to develop an automated and interpretable framework for rectal cancer detection and segmentation using the CARE dataset.
         <br></br>
         The framework is designed to automatically identify the presence and approximate location of rectal tumor regions from input medical images, generate accurate pixel-level segmentation masks that delineate tumor boundaries from surrounding normal anatomical structures, combine local and global feature learning through a hybrid CNN–Transformer architecture, enhance tumor-specific feature representation using attention mechanisms that suppress irrelevant background information and emphasize diagnostically meaningful regions, provide interpretable predictions through attention maps or heatmaps that visually indicate image regions contributing to the model's decisions, and evaluate the proposed framework on the CARE dataset using established segmentation and detection performance measures.
-
         <h3>Methods</h3>
         RectoScan AI employs a hybrid TransUNet-based architecture for rectal cancer segmentation on the CARE dataset. A CNN encoder first extracts multi-scale local features such as tumor edges, texture, and anatomical structures. The deepest feature representation is then processed by a Transformer bottleneck to capture long-range spatial dependencies and global anatomical context.
         <br></br>
