@@ -217,6 +217,10 @@ To further improve localization of small, irregular, and poorly defined tumor re
             if st.button("Launch"):
                 st.session_state.active_tab = "🔎 Prediction"
                 st.rerun()
+    st.caption(
+            "⚠️ **Medical Disclaimer:** This tool is intended for research and clinical decision support only. "
+            "Final diagnosis and treatment planning must be confirmed by a qualified medical professional."
+        )
 
 # ============================================
 # TAB 2: PREDICTION
